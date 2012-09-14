@@ -20,11 +20,11 @@ PPS_MODELS = { (18.0, 10.0) : "PPS11810", # not confirmed yet
                (36.0,  5.0) : "PPS11360", # not confirmed yet
                (60.0,  2.5) : "PPS11603", # not confirmed yet
                (18.0, 20.0) : "PPS13610", # not confirmed yet
-               (36.0, 10.0) : "PPS16005", # not confirmed yet
+               (36.2, 12.0) : "PPS16005", # confirmed
                (60.0,  5.0) : "PPS11815"  # not confirmed yet
              }
 
-PPS_TIMEOUT = 0.2
+PPS_TIMEOUT =1.00
 
 def _pps_debug(s):
     sys.stdout.write(s)
@@ -116,21 +116,21 @@ class PPS(object):
         """
         enable/disable the PS output
         """
-        state = int(bool(state))
+        state = int(not bool(state))
         self._query("SOUT%d" % state)
 
     def voltage(self, voltage):
         """
         set voltage: silently saturates at 0 and VMAX
         """
-        voltage = min(max(int(float(voltage) * 10), self.VMAX), 0)
+        voltage = max(min(int(float(voltage) * 10), int(self.VMAX*10)), 0)
         self._query("VOLT%03d" % voltage)
 
     def current(self, current):
         """
         set current: silently saturates at 0 and IMAX
         """
-        current = min(max(int(float(current) * 10), self.IMAX), 0)
+        current = max(min(int(float(current) * 10), int(self.IMAX*10)), 0)
         self._query("CURR%03d" % current)
 
     def reading(self):
@@ -138,9 +138,9 @@ class PPS(object):
         read applied output voltage and current and if PS is in "CV" or "CC" mode
         """
         s = self._query("GETD")
-        V = int(s[0:3]) / 10.
-        I = int(s[3:6]) / 10.
-        MODE = bool(int(s[6:9]))
+        V = int(s[0:4]) / 100.
+        I = int(s[4:8]) / 100.
+        MODE = bool(int(s[8]))
         return (V, I, ("CV", "CC")[MODE])
 
     def store_presets(self, VC0, VC1, VC2):
@@ -148,8 +148,8 @@ class PPS(object):
         store preset value tuples (voltage, current)
         """
         VC = VC0 + VC1 + VC2
-        V = map(lambda x: min(max(int(float(x)*10.), self.VMAX), 0), VC[::2])
-        I = map(lambda x: min(max(int(float(x)*10.), self.IMAX), 0), VC[1::2])
+        V = map(lambda x: max(min(int(float(x)*10.), int(self.VMAX*10)), 0), VC[::2])
+        I = map(lambda x: max(min(int(float(x)*10.), int(self.IMAX*10)), 0), VC[1::2])
         self._query("PROM" + "".join(["%03d%03d" % s for s in zip(V, I)]))
 
     def load_presets(self):
