@@ -17,7 +17,7 @@ import sys
 # Please confirm the modelnumbers.
 #
 PPS_MODELS = { (18.0, 10.0) : "PPS11810", # not confirmed yet
-               (36.0,  5.0) : "PPS11360", # not confirmed yet
+               (36.2,  7.0) : "PPS11360", # confirmed
                (60.0,  2.5) : "PPS11603", # not confirmed yet
                (18.0, 20.0) : "PPS13610", # not confirmed yet
                (36.2, 12.0) : "PPS16005", # confirmed
@@ -108,8 +108,9 @@ class PPS(object):
         get maximum voltage and current from PS
         """
         s = self._query("GMAX")
+        self.IMULT = 100. if s == "362700" else 10.
         V = int(s[0:3]) / 10.
-        I = int(s[3:6]) / 10.
+        I = int(s[3:6]) / self.IMULT
         return (V, I)
 
     def output(self, state):
@@ -130,7 +131,7 @@ class PPS(object):
         """
         set current: silently saturates at 0 and IMAX
         """
-        current = max(min(int(float(current) * 10), int(self.IMAX*10)), 0)
+        current = max(min(int(float(current) * self.IMULT), int(self.IMAX * self.IMULT)), 0)
         self._query("CURR%03d" % current)
 
     def reading(self):
@@ -149,7 +150,7 @@ class PPS(object):
         """
         VC = VC0 + VC1 + VC2
         V = map(lambda x: max(min(int(float(x)*10.), int(self.VMAX*10)), 0), VC[::2])
-        I = map(lambda x: max(min(int(float(x)*10.), int(self.IMAX*10)), 0), VC[1::2])
+        I = map(lambda x: max(min(int(float(x)*self.IMULT), int(self.IMAX*self.IMULT)), 0), VC[1::2])
         self._query("PROM" + "".join(["%03d%03d" % s for s in zip(V, I)]))
 
     def load_presets(self):
@@ -158,11 +159,11 @@ class PPS(object):
         """
         s = self._query("GETM")
         V0 = int(s[ 0: 3]) / 10.
-        I0 = int(s[ 3: 6]) / 10.
+        I0 = int(s[ 3: 6]) / self.IMULT
         V1 = int(s[ 7:10]) / 10.
-        I1 = int(s[10:13]) / 10.
+        I1 = int(s[10:13]) / self.IMULT
         V2 = int(s[14:17]) / 10.
-        I2 = int(s[17:20]) / 10.
+        I2 = int(s[17:20]) / self.IMULT
         return [(V0, I0), (V1, I1), (V2, I2)]
         
     def use_preset(self, nbr):
@@ -179,7 +180,7 @@ class PPS(object):
         """
         s = self._query("GETS")
         V = int(s[0:3]) / 10.
-        I = int(s[3:6]) / 10.
+        I = int(s[3:6]) / self.IMULT
         return (V, I)
 
     @preset.setter
@@ -207,12 +208,12 @@ class PPS(object):
         preset current
         """
         s = self._query("GOCP")
-        I = int(s[0:3]) / 10.
+        I = int(s[0:3]) / self.IMULT
         return I
 
     @preset_current.setter
     def preset_current(self, current):
-        current = min(max(int(float(current) * 10), self.IMAX), 0)
+        current = min(max(int(float(current) * self.IMULT), int(self.IMAX * self.IMULT)), 0)
         self._query("SOCP%03d" % current)
 
     def power_dissipation(self):
