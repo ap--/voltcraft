@@ -21,7 +21,8 @@ PPS_MODELS = { (18.0, 10.0) : "PPS11810", # not confirmed yet
                (60.0,  2.5) : "PPS11603", # not confirmed yet
                (18.0, 20.0) : "PPS13610", # not confirmed yet
                (36.2, 12.0) : "PPS16005", # confirmed
-               (60.0,  5.0) : "PPS11815"  # not confirmed yet
+               (60.0,  5.0) : "PPS11815",  # not confirmed yet
+               (18.2,  12.0): "PPS11810"  # added MB 2019-01-10
              }
 
 PPS_TIMEOUT =1.00
@@ -65,6 +66,9 @@ class PPS(object):
         self._debug = bool(debug)
         try:
             model = self.limits()
+
+            print(model)
+
             self._MODEL = PPS_MODELS[model]
             self._VMAX = model[0]
             self._IMAX = model[1]
@@ -90,11 +94,12 @@ class PPS(object):
         tx/rx to/from PS
         """
         if self._debug: _pps_debug("PPS <- %s<CR>\n" % cmd)
-        self._Serial.write("%s\r" % cmd)
+        self._Serial.write((cmd + '\r').encode())
+
         b = []
         if self._debug: _pps_debug("PPS -> ")
         while True:
-            b.append(self._Serial.read(1))
+            b.append(self._Serial.read(1).decode('utf-8'))
             if self._debug: _pps_debug(b[-1].replace('\r', '<CR>'))
             if b[-1] == "":
                 raise serial.SerialTimeoutException()
