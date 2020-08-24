@@ -90,18 +90,18 @@ class PPS(object):
         tx/rx to/from PS
         """
         if self._debug: _pps_debug("PPS <- %s<CR>\n" % cmd)
-        self._Serial.write("%s\r" % cmd)
+        self._Serial.write((cmd + "\r").encode())
         b = []
         if self._debug: _pps_debug("PPS -> ")
         while True:
             b.append(self._Serial.read(1))
-            if self._debug: _pps_debug(b[-1].replace('\r', '<CR>'))
+            if self._debug: _pps_debug(b[-1].replace(b'\r', b'<CR>').decode())
             if b[-1] == "":
                 raise serial.SerialTimeoutException()
-            if b[-3:] == list("OK\r"):
+            if b[-3:] == [ bytes(c, encoding="ASCII") for c in "OK\r" ]:
                 break
         if self._debug: _pps_debug('\n')
-        return "".join(b[:-4])
+        return (b"".join(b[:-4])).decode()
 
     def limits(self):
         """
@@ -149,8 +149,8 @@ class PPS(object):
         store preset value tuples (voltage, current)
         """
         VC = VC0 + VC1 + VC2
-        V = map(lambda x: max(min(int(float(x)*10.), int(self.VMAX*10)), 0), VC[::2])
-        I = map(lambda x: max(min(int(float(x)*self.IMULT), int(self.IMAX*self.IMULT)), 0), VC[1::2])
+        V = [max(min(int(float(x)*10.), int(self.VMAX*10)), 0) for x in VC[::2]]
+        I = [max(min(int(float(x)*self.IMULT), int(self.IMAX*self.IMULT)), 0) for x in VC[1::2]]
         self._query("PROM" + "".join(["%03d%03d" % s for s in zip(V, I)]))
 
     def load_presets(self):
