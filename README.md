@@ -18,3 +18,10 @@ supply.voltage(10.0)
 supply.current(2.0)
 supply.output(1)
 ```
+
+Install via:
+```console
+pip install voltcraft
+```
+
+There's no documentation, but the module is tiny, so please just read the [voltcraft/pps.py](voltcraft/pps.py) :sparkling_heart:
