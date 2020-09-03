@@ -1,10 +1,7 @@
-"""
-Voltcraft Python Module:
-========================
-    
-    last change :           28.08.12
-    
-    currently implemented:  pps
+"""voltcraft python module"""
+try:
+    from voltcraft._version import version as __version__
+except ImportError:
+    __version__ = "not-installed"
 
-"""
-
+__author__ = "Andreas Poehlmann"
