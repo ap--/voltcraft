@@ -16,6 +16,7 @@ PPS_MODELS = {
     (60.0, 05.0): "PPS11815",  # not confirmed yet
     (18.2, 12.0): "PPS11810",  # added MB 2019-01-10
     (32.2, 21.5): "DPPS3220",  # added tykling 2019-03-26
+    (60.5, 11.0): "DPPS6010",
 }
 
 PPS_TIMEOUT = 1.00
