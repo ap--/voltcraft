@@ -6,8 +6,9 @@
 [![GitHub issues](https://img.shields.io/github/issues/ap--/voltcraft.svg)](https://github.com/ap--/voltcraft/issues)
 [![Github Sponsors](https://img.shields.io/badge/github-sponsors-blue)](https://github.com/sponsors/ap--)
 
-Python module for controlling Voltcraft PPS powersupplies.
-<br>Available at [www.conrad.com](https://www.conrad.com/search?search=voltcraft%20pps)
+Python module for controlling Voltcraft PPS and DPPS powersupplies.
+<br>Available at [www.conrad.com (PPS)](https://www.conrad.com/search?search=voltcraft%20pps)
+and [www.conrad.com (DPPS)](https://www.conrad.com/search?search=voltcraft%20dpps)
 
 ```python
 from voltcraft.pps import PPS
