@@ -105,7 +105,7 @@ class PPS(object):
         while True:
             b.append(self._serial.read(1))
             self._debug(b[-1].replace(b"\r", b"<CR>").decode())
-            if b"" in b or b"\x00" in b:
+            if b[-1] in {b"", b"\x00"}:
                 raise serial.SerialTimeoutException()
             if b"".join(b[-3:]) == b"OK\r":
                 break
