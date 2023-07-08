@@ -33,7 +33,7 @@ def _pps_debug(s, debug=True):
 class PPS(object):
     def __init__(self, port="/dev/ttyUSB0", reset=True, prom=None, debug=False):
         """PPS(port, reset, prom)
-        
+
         Parameters
         ----------
         port : str
