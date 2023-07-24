@@ -9,3 +9,7 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools_scm]
 write_to = "voltcraft/_version.py"
 version_scheme = "post-release"
+
+[tool.mypy]
+ignore_missing_imports = true
+strict = true
