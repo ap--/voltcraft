@@ -24,7 +24,7 @@ jobs:
         python -m pip install pre-commit
     - name: Lint, mypy and formatting
       run: |
-        pre-commit run
+        pre-commit run -a
     - name: Install build
       run: python -m pip install build
     - name: Build a binary wheel and a source tarball
