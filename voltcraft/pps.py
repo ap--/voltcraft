@@ -1,8 +1,11 @@
 """voltcraft.pps"""
+from __future__ import annotations
 import functools
 import sys
 
 import serial
+
+
 if sys.version_info >= (3, 8):
     from typing import Literal
 else:
@@ -83,7 +86,7 @@ class PPS(object):
             self.voltage(0)
             self.current(0)
 
-        if not (prom is None):
+        if prom is not None:
             self.use_preset(prom)
 
     @property
