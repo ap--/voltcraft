@@ -3,7 +3,10 @@ import functools
 import sys
 
 import serial
-from typing_extensions import Literal
+if sys.version_info >= (3, 8):
+    from typing import Literal
+else:
+    from typing_extensions import Literal
 
 # The model can be identified by the maximum voltage and maximum current.
 # But this is probably one of the weirdest naming-schemes I've seen...
