@@ -6,16 +6,13 @@ import sys
 
 import serial
 
-if sys.version_info >= (3, 8):
-    from typing import Literal
-else:
-    from typing_extensions import Literal
+from typing import Literal
 
 # The model can be identified by the maximum voltage and maximum current.
 # But this is probably one of the weirdest naming-schemes I've seen...
 # It just doesn't really make sense...
 PPS_MODELS = {
-    ((18.0, 10.0)): "PPS11810",  # not confirmed yet
+    (18.0, 10.0): "PPS11810",  # not confirmed yet
     (36.2, 07.0): "PPS11360",  # confirmed
     (60.0, 02.5): "PPS11603",  # not confirmed yet
     (18.2, 22.0): "PPS13610",  # confirmed by Yanuino 2021-12-29, ersekcs 2021-11-24

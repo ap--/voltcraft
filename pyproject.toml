@@ -13,3 +13,7 @@ version_scheme = "post-release"
 [tool.mypy]
 ignore_missing_imports = true
 strict = true
+python_version = "3.8"
+
+[tool.black]
+target-version = ["py38"]
