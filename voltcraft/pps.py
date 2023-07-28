@@ -3,10 +3,9 @@ from __future__ import annotations
 
 import functools
 import sys
+from typing import Literal
 
 import serial
-
-from typing import Literal
 
 # The model can be identified by the maximum voltage and maximum current.
 # But this is probably one of the weirdest naming-schemes I've seen...
