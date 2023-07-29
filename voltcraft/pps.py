@@ -1,6 +1,9 @@
 """voltcraft.pps"""
+from __future__ import annotations
+
 import functools
 import sys
+from typing import Literal
 
 import serial
 
@@ -22,7 +25,7 @@ PPS_MODELS = {
 PPS_TIMEOUT = 1.00
 
 
-def _pps_debug(s, debug=True):
+def _pps_debug(s: str, debug: bool = True) -> None:
     """debug printing for PPS"""
     if debug:
         sys.stdout.write(s)
@@ -30,8 +33,14 @@ def _pps_debug(s, debug=True):
 
 
 # noinspection PyPep8Naming
-class PPS(object):
-    def __init__(self, port="/dev/ttyUSB0", reset=True, prom=None, debug=False):
+class PPS:
+    def __init__(
+        self,
+        port: str = "/dev/ttyUSB0",
+        reset: bool = True,
+        prom: int | None = None,
+        debug: bool = False,
+    ):
         """PPS(port, reset, prom)
 
         Parameters
@@ -73,34 +82,34 @@ class PPS(object):
             self.voltage(0)
             self.current(0)
 
-        if not (prom is None):
+        if prom is not None:
             self.use_preset(prom)
 
     @property
-    def VMAX(self):
+    def VMAX(self) -> float:
         """maximum output voltage"""
         return self._vmax
 
     @property
-    def IMAX(self):
+    def IMAX(self) -> float:
         """maximum output current"""
         return self._imax
 
     @property
-    def MODEL(self):
+    def MODEL(self) -> str:
         """PS model number"""
         return self._model
 
     @property
-    def IMULT(self):
+    def IMULT(self) -> float:
         """current multiplier"""
         return self._imult
 
-    def _query(self, cmd):
+    def _query(self, cmd: str) -> str:
         """tx/rx to/from PS"""
         self._debug("PPS <- %s<CR>\n" % cmd)
         self._serial.write((cmd + "\r").encode())
-        b = []
+        b: list[bytes] = []
         self._debug("PPS -> ")
         while True:
             b.append(self._serial.read(1))
@@ -112,38 +121,43 @@ class PPS(object):
         self._debug("\n")
         return (b"".join(b[:-4])).decode()
 
-    def limits(self):
+    def limits(self) -> tuple[float, float]:
         """get maximum voltage and current from PS"""
         return self._vmax, self._imax
 
-    def output(self, state):
+    def output(self, state: int) -> None:
         """enable/disable the PS output"""
         state = 1 if not state else 0
         self._query("SOUT%d" % state)
 
-    def voltage(self, voltage):
+    def voltage(self, voltage: float) -> None:
         """set voltage: silently saturates at 0 and VMAX"""
         voltage = min(max(0, int(voltage * 10)), int(self._vmax * 10))
         self._query("VOLT%03d" % voltage)
 
-    def current(self, current):
+    def current(self, current: float) -> None:
         """set current: silently saturates at 0 and IMAX"""
         current = min(max(0, int(current * self._imult)), int(self._imax * self._imult))
         self._query("CURR%03d" % current)
 
-    def reading(self):
+    def reading(self) -> tuple[float, float, Literal["CC", "CV"]]:
         """read applied output voltage and current and if PS is in "CV" or "CC" mode"""
         getd = self._query("GETD")
         voltage = int(getd[0:4]) / 100.0
         current = int(getd[4:8]) / 100.0
-        mode = "CC" if int(getd[8]) else "CV"
+        mode: Literal["CC", "CV"] = "CC" if int(getd[8]) else "CV"
         return voltage, current, mode
 
-    def store_presets(self, VC0, VC1, VC2):
+    def store_presets(
+        self,
+        VC0: tuple[float, float],
+        VC1: tuple[float, float],
+        VC2: tuple[float, float],
+    ) -> None:
         """
         store preset value tuples (voltage, current)
         """
-        vcs = []
+        vcs: list[tuple[float, float]] = []
         for voltage, current in [VC0, VC1, VC2]:
             vcs.append(
                 (
@@ -153,7 +167,7 @@ class PPS(object):
             )
         self._query("PROM%s" % "".join("%03d%03d" % s for s in vcs))
 
-    def load_presets(self):
+    def load_presets(self) -> list[tuple[float, float]]:
         """load preset value tuples (voltage, current)"""
         getm = self._query("GETM")
         v0 = int(getm[0:3]) / 10.0
@@ -164,13 +178,13 @@ class PPS(object):
         i2 = int(getm[17:20]) / self._imult
         return [(v0, i0), (v1, i1), (v2, i2)]
 
-    def use_preset(self, nbr):
+    def use_preset(self, nbr: int) -> None:
         """use specified preset"""
         nbr = min(max(0, int(nbr)), 2)
         self._query("RUNM%d" % nbr)
 
     @property
-    def preset(self):
+    def preset(self) -> tuple[float, float]:
         """preset values: (voltage, current)"""
         gets = self._query("GETS")
         voltage = int(gets[0:3]) / 10.0
@@ -178,35 +192,35 @@ class PPS(object):
         return voltage, current
 
     @preset.setter
-    def preset(self, VC):
+    def preset(self, VC: tuple[float, float]) -> None:
         self.preset_voltage = VC[0]
         self.preset_current = VC[1]
 
     @property
-    def preset_voltage(self):
+    def preset_voltage(self) -> float:
         """preset voltage"""
         govp = self._query("GOVP")
         voltage = int(govp[0:3]) / 10.0
         return voltage
 
     @preset_voltage.setter
-    def preset_voltage(self, voltage):
+    def preset_voltage(self, voltage: float) -> None:
         voltage = min(max(0.0, float(voltage)), self._vmax) * 10
         self._query("SOVP%03d" % int(voltage))
 
     @property
-    def preset_current(self):
+    def preset_current(self) -> float:
         """preset current"""
         gocp = self._query("GOCP")
         current = int(gocp[0:3]) / self._imult
         return current
 
     @preset_current.setter
-    def preset_current(self, current):
+    def preset_current(self, current: float) -> None:
         current = min(max(0.0, float(current)), self._imax) * self._imult
         self._query("SOCP%03d" % int(current))
 
-    def power_dissipation(self):
+    def power_dissipation(self) -> float:
         """return current power dissipation"""
         voltage, current, _ = self.reading()
         return voltage * current
