@@ -26,3 +26,23 @@ pip install voltcraft
 ```
 
 There's no documentation, but the module is tiny, so please just read the [voltcraft/pps.py](voltcraft/pps.py) :sparkling_heart:
+
+It is also possible to use this module as a command-line tool
+
+```shell
+$ py -m voltcraft COM3
+MODEL=DPPS3230
+IMAX=31.5
+VMAX=32.2
+IMULT=10.0
+limits=(32.2, 31.5)
+reading=(14.01, 2.13, 'CV')
+
+$ py -m voltcraft COM3 off
+
+$ py -m voltcraft COM3 read
+reading=(3.14, 0.0, 'CV')
+
+$ py -m voltcraft COM3 read
+reading=(1.7, 0.0, 'CV')
+```
