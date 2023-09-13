@@ -1,6 +1,7 @@
-import sys
 import argparse
-from typing import Optional, List
+import sys
+from typing import List, Optional
+
 from .pps import PPS
 
 
@@ -28,7 +29,7 @@ def create_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(argv: Optional[List[str]]=None) -> int:
+def main(argv: Optional[List[str]] = None) -> int:
     opts = create_parser().parse_args(argv)
     pps = PPS(port=opts.port, reset=False)
     if opts.cmd == "status":
