@@ -25,15 +25,15 @@ PPS_MODELS = {
 
 # Some models have a minimum voltage.
 PPS_MIN_VOLTAGE = {
-    "PPS11810": 0,      # not confirmed yet
-    "PPS11360": 0,      # not confirmed yet
-    "PPS11603": 0,      # not confirmed yet
-    "PPS13610": 0,      # not confirmed yet
-    "PPS16005": 0.8,    # confirmed by jonathanlarochelle 2023-10-27
-    "PPS11815": 0,      # not confirmed yet
-    "DPPS3220": 0.8,    # confirmed by jonathanlarochelle 2023-10-27
-    "DPPS3230": 0,      # not confirmed yet
-    "DPPS6010": 0       # not confirmed yet
+    "PPS11810": 0,  # not confirmed yet
+    "PPS11360": 0,  # not confirmed yet
+    "PPS11603": 0,  # not confirmed yet
+    "PPS13610": 0,  # not confirmed yet
+    "PPS16005": 0.8,  # confirmed by jonathanlarochelle 2023-10-27
+    "PPS11815": 0,  # not confirmed yet
+    "DPPS3220": 0.8,  # confirmed by jonathanlarochelle 2023-10-27
+    "DPPS3230": 0,  # not confirmed yet
+    "DPPS6010": 0,  # not confirmed yet
 }
 
 PPS_TIMEOUT = 1.00
@@ -94,8 +94,9 @@ class PPS:
         try:
             self._vmin = PPS_MIN_VOLTAGE[self._model]
         except KeyError:
-            raise RuntimeError("unknown minimum voltage for Voltcraft {}"
-                               .format(self._model))
+            raise RuntimeError(
+                f"unknown minimum voltage for Voltcraft {self._model}"
+            )
 
         if bool(reset):
             self.output(0)
