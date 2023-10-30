@@ -158,7 +158,7 @@ class PPS:
 
     def voltage(self, voltage: float) -> None:
         """set voltage: silently saturates at VMIN and VMAX"""
-        voltage = min(max(self._vmin * 10, int(voltage * 10)), int(self._vmax * 10))
+        voltage = min(max(int(self._vmin * 10), int(voltage * 10)), int(self._vmax * 10))
         self._query("VOLT%03d" % voltage)
 
     def current(self, current: float) -> None:
