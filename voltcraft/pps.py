@@ -23,6 +23,19 @@ PPS_MODELS = {
     (60.5, 11.0): "DPPS6010",
 }
 
+# Some models have a minimum voltage.
+PPS_MIN_VOLTAGE = {
+    "PPS11810": 0,  # not confirmed yet
+    "PPS11360": 0,  # not confirmed yet
+    "PPS11603": 0,  # not confirmed yet
+    "PPS13610": 0,  # not confirmed yet
+    "PPS16005": 0.8,  # confirmed by jonathanlarochelle 2023-10-27
+    "PPS11815": 0,  # not confirmed yet
+    "DPPS3220": 0.8,  # confirmed by jonathanlarochelle 2023-10-27
+    "DPPS3230": 0,  # not confirmed yet
+    "DPPS6010": 0,  # not confirmed yet
+}
+
 PPS_TIMEOUT = 1.00
 
 
@@ -78,6 +91,11 @@ class PPS:
                 )
             )
 
+        try:
+            self._vmin = PPS_MIN_VOLTAGE[self._model]
+        except KeyError:
+            raise RuntimeError(f"unknown minimum voltage for Voltcraft {self._model}")
+
         if bool(reset):
             self.output(0)
             self.voltage(0)
@@ -95,6 +113,11 @@ class PPS:
     def IMAX(self) -> float:
         """maximum output current"""
         return self._imax
+
+    @property
+    def VMIN(self) -> float:
+        """minimum output voltage"""
+        return self._vmin
 
     @property
     def MODEL(self) -> str:
@@ -132,8 +155,10 @@ class PPS:
         self._query("SOUT%d" % state)
 
     def voltage(self, voltage: float) -> None:
-        """set voltage: silently saturates at 0 and VMAX"""
-        voltage = min(max(0, int(voltage * 10)), int(self._vmax * 10))
+        """set voltage: silently saturates at VMIN and VMAX"""
+        voltage = min(
+            max(int(self._vmin * 10), int(voltage * 10)), int(self._vmax * 10)
+        )
         self._query("VOLT%03d" % voltage)
 
     def current(self, current: float) -> None:
@@ -162,7 +187,7 @@ class PPS:
         for voltage, current in [VC0, VC1, VC2]:
             vcs.append(
                 (
-                    min(max(0.0, voltage), self._vmax) * 10,
+                    min(max(self._vmin, voltage), self._vmax) * 10,
                     min(max(0.0, current), self._imax) * self._imult,
                 )
             )
@@ -206,7 +231,7 @@ class PPS:
 
     @preset_voltage.setter
     def preset_voltage(self, voltage: float) -> None:
-        voltage = min(max(0.0, float(voltage)), self._vmax) * 10
+        voltage = min(max(self._vmin, float(voltage)), self._vmax) * 10
         self._query("SOVP%03d" % int(voltage))
 
     @property
