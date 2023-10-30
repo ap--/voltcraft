@@ -94,9 +94,7 @@ class PPS:
         try:
             self._vmin = PPS_MIN_VOLTAGE[self._model]
         except KeyError:
-            raise RuntimeError(
-                f"unknown minimum voltage for Voltcraft {self._model}"
-            )
+            raise RuntimeError(f"unknown minimum voltage for Voltcraft {self._model}")
 
         if bool(reset):
             self.output(0)
@@ -158,7 +156,9 @@ class PPS:
 
     def voltage(self, voltage: float) -> None:
         """set voltage: silently saturates at VMIN and VMAX"""
-        voltage = min(max(int(self._vmin * 10), int(voltage * 10)), int(self._vmax * 10))
+        voltage = min(
+            max(int(self._vmin * 10), int(voltage * 10)), int(self._vmax * 10)
+        )
         self._query("VOLT%03d" % voltage)
 
     def current(self, current: float) -> None:
