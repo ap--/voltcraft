@@ -26,7 +26,7 @@ PPS_MODELS = {
 # Some models have a minimum voltage.
 PPS_MIN_VOLTAGE = {
     "PPS11810": 0,  # not confirmed yet
-    "PPS11360": 0,  # not confirmed yet
+    "PPS11360": 0.8,  # confirmed by michael-dauer 2023-11-08
     "PPS11603": 0,  # not confirmed yet
     "PPS13610": 0,  # not confirmed yet
     "PPS16005": 0.8,  # confirmed by jonathanlarochelle 2023-10-27
