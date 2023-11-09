@@ -56,4 +56,3 @@ python_version = "3.8"
 
 [tool.black]
 target-version = ["py38"]
-
