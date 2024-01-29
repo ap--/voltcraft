@@ -10,7 +10,7 @@ repos:
   hooks:
   - id: isort
 - repo: https://github.com/psf/black
-  rev: 23.12.1
+  rev: 24.1.1
   hooks:
   - id: black
 - repo: https://github.com/pre-commit/mirrors-mypy
@@ -18,7 +18,7 @@ repos:
   hooks:
   - id: mypy
 - repo: https://github.com/PyCQA/flake8
-  rev: '6.1.0'
+  rev: '7.0.0'
   hooks:
   - id: flake8
     additional_dependencies:
