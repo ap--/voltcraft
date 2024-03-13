@@ -13,7 +13,7 @@ and [www.conrad.com (DPPS)](https://www.conrad.com/search?search=voltcraft%20dpp
 ```python
 from voltcraft.pps import PPS
 
-supply = PPS(port="/dev/ttyUSB0", reset=True)
+supply = PPS(port="/dev/ttyUSB0", reset=True) #in Windows change the port string to COMx (in my case COM4)
 
 supply.voltage(10.0)
 supply.current(2.0)
