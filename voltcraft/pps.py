@@ -53,7 +53,7 @@ def _pps_debug(s: str, debug: bool = True) -> None:
 class PPS:
     def __init__(
         self,
-        port: str = "/dev/ttyUSB0",  # in Windows change this string to COMx (in my case COM4)
+        port: str = "/dev/ttyUSB0",  # in Windows change string to COMx (eg COM4)
         reset: bool = True,
         prom: int | None = None,
         debug: bool = False,
