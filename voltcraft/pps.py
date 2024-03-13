@@ -36,7 +36,7 @@ PPS_MIN_VOLTAGE = {
     "DPPS3220": 0.8,  # confirmed by jonathanlarochelle 2023-10-27
     "DPPS3230": 0,  # not confirmed yet
     "DPPS6010": 0,  # not confirmed yet
-    "DPPS1640": 1.0, # confirmed by chillinglu 2024-03-13
+    "DPPS1640": 1.0,  # confirmed by chillinglu 2024-03-13
 }
 
 PPS_TIMEOUT = 1.00
@@ -53,7 +53,7 @@ def _pps_debug(s: str, debug: bool = True) -> None:
 class PPS:
     def __init__(
         self,
-        port: str = "/dev/ttyUSB0", #in Windows change this string to COMx (in my case COM4)
+        port: str = "/dev/ttyUSB0",  # in Windows change this string to COMx (in my case COM4)
         reset: bool = True,
         prom: int | None = None,
         debug: bool = False,
