@@ -78,7 +78,8 @@ class PPS:
 
         try:
             gmax = self._query("GMAX")
-        except serial.SerialTimeoutException:
+        except Exception:
+            self._serial.close()
             raise RuntimeError("No Voltcraft PPS powersupply connected to %s" % port)
         else:
             self._imult = 100.0 if gmax == "362700" else 10.0
@@ -88,6 +89,7 @@ class PPS:
         try:
             self._model = PPS_MODELS[(self._vmax, self._imax)]
         except KeyError:
+            self._serial.close()
             raise RuntimeError(
                 "unknown Voltcraft PPS model with max V: {}, I: {}".format(
                     self._vmax, self._imax
@@ -97,6 +99,7 @@ class PPS:
         try:
             self._vmin = PPS_MIN_VOLTAGE[self._model]
         except KeyError:
+            self._serial.close()
             raise RuntimeError(f"unknown minimum voltage for Voltcraft {self._model}")
 
         if bool(reset):
