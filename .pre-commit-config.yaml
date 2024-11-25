@@ -14,7 +14,7 @@ repos:
   hooks:
   - id: black
 - repo: https://github.com/pre-commit/mirrors-mypy
-  rev: 'v1.12.1'
+  rev: 'v1.13.0'
   hooks:
   - id: mypy
 - repo: https://github.com/PyCQA/flake8
@@ -25,7 +25,7 @@ repos:
     - flake8-black==0.3.6
     exclude: "^(build|docs|setup.py)|tests[/]"
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v3.18.0
+    rev: v3.19.0
     hooks:
     - id: pyupgrade
       args: [--py38-plus]
