@@ -23,6 +23,7 @@ PPS_MODELS = {
     (32.2, 31.5): "DPPS3230",  # added cdleonard 2023-09-13
     (60.5, 11.0): "DPPS6010",
     (16.2, 43.0): "DPPS1640",  # added chillinglu 2024-03-13
+    (16.2, 33.0): "DPPS1630",
 }
 
 # Some models have a minimum voltage.
@@ -37,6 +38,7 @@ PPS_MIN_VOLTAGE = {
     "DPPS3230": 0.8,  # confirmed by JLS666 2025-01-09
     "DPPS6010": 0,  # not confirmed yet
     "DPPS1640": 1.0,  # confirmed by chillinglu 2024-03-13
+    "DPPS1630": 1.0,
 }
 
 PPS_TIMEOUT = 1.00
