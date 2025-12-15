@@ -1,20 +1,20 @@
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v5.0.0
+  rev: v6.0.0
   hooks:
   - id: trailing-whitespace
   - id: end-of-file-fixer
   - id: check-added-large-files
 - repo: https://github.com/pycqa/isort
-  rev: 6.0.1
+  rev: 7.0.0
   hooks:
   - id: isort
-- repo: https://github.com/psf/black
-  rev: 25.1.0
+- repo: https://github.com/psf/black-pre-commit-mirror
+  rev: 25.12.0
   hooks:
   - id: black
 - repo: https://github.com/pre-commit/mirrors-mypy
-  rev: 'v1.17.1'
+  rev: 'v1.19.1'
   hooks:
   - id: mypy
 - repo: https://github.com/PyCQA/flake8
@@ -25,7 +25,7 @@ repos:
     - flake8-black==0.3.6
     exclude: "^(build|docs|setup.py)|tests[/]"
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v3.20.0
+    rev: v3.21.2
     hooks:
     - id: pyupgrade
       args: [--py38-plus]
