@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import functools
 import sys
+import warnings
 from typing import Literal
 
 import serial
@@ -91,18 +92,24 @@ class PPS:
         try:
             self._model = PPS_MODELS[(self._vmax, self._imax)]
         except KeyError:
-            self._serial.close()
-            raise RuntimeError(
-                "unknown Voltcraft PPS model with max V: {}, I: {}".format(
-                    self._vmax, self._imax
+            # Grace mode: unknown model, continue with measured limits
+            self._model = "UNKNOWN"
+            warnings.warn(
+                (
+                    "Unknown Voltcraft PPS model (VMAX=%.1f, IMAX=%.1f).\n"
+                    "Please open a PR at https://github.com/ap--/voltcraft"
+                    'to add to PPS_MODELS: (%.1f, %.1f): "MODEL_NAME"'
                 )
+                % (self._vmax, self._imax, self._vmax, self._imax),
+                RuntimeWarning,
+                stacklevel=2,
             )
 
         try:
             self._vmin = PPS_MIN_VOLTAGE[self._model]
         except KeyError:
-            self._serial.close()
-            raise RuntimeError(f"unknown minimum voltage for Voltcraft {self._model}")
+            # Grace mode: unknown minimum voltage, default to 0.0
+            self._vmin = 0.0
 
         if bool(reset):
             self.output(0)
