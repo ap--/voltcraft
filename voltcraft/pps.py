@@ -18,7 +18,7 @@ PPS_MODELS = {
     (60.0, 02.5): "PPS11603",  # not confirmed yet
     (18.2, 22.0): "PPS13610",  # confirmed by Yanuino 2021-12-29, ersekcs 2021-11-24
     (36.2, 12.0): "PPS16005",  # confirmed
-    (60.0, 05.0): "PPS11815",  # not confirmed yet
+    (60.5, 68.0): "PPS11815",  # confirmed by mplha 2026-01-09
     (18.2, 12.0): "PPS11810",  # added MB 2019-01-10
     (32.2, 21.5): "DPPS3220",  # added tykling 2019-03-26
     (32.2, 31.5): "DPPS3230",  # added cdleonard 2023-09-13
@@ -34,7 +34,7 @@ PPS_MIN_VOLTAGE = {
     "PPS11603": 0,  # not confirmed yet
     "PPS13610": 0,  # not confirmed yet
     "PPS16005": 0.8,  # confirmed by jonathanlarochelle 2023-10-27
-    "PPS11815": 0,  # not confirmed yet
+    "PPS11815": 0.8,  # confirmed by mplha 2026-01-09
     "DPPS3220": 0.8,  # confirmed by jonathanlarochelle 2023-10-27
     "DPPS3230": 0.8,  # confirmed by JLS666 2025-01-09
     "DPPS6010": 0,  # not confirmed yet
