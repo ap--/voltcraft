@@ -34,7 +34,7 @@ PPS_MIN_VOLTAGE = {
     "PPS11603": 0,  # not confirmed yet
     "PPS13610": 0,  # not confirmed yet
     "PPS16005": 0.8,  # confirmed by jonathanlarochelle 2023-10-27
-    "PPS11815": 0,8  # confirmed by mplha 2026-01-09
+    "PPS11815": 0,8,  # confirmed by mplha 2026-01-09
     "DPPS3220": 0.8,  # confirmed by jonathanlarochelle 2023-10-27
     "DPPS3230": 0.8,  # confirmed by JLS666 2025-01-09
     "DPPS6010": 0,  # not confirmed yet
